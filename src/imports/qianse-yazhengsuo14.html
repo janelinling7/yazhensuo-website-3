@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>亚整所 - 高端医疗美容</title>
+    <!-- 引入 Swiper 轮播图样式 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <style>
+        /* ================= 全局设计系统 ================= */
+        :root {
+            --color-primary: #C5A880;     /* 香槟金 */
+            --color-primary-light: #E8DCC8;
+            --color-bg-light: #FAFAFA;    /* 浅色主背景 */
+            --color-bg-white: #FFFFFF;    /* 纯白 */
+            --color-text-dark: #2C2C2C;   /* 深色正文 */
+            --color-text-gray: #888888;   /* 浅灰说明文字 */
+            --font-serif: 'Playfair Display', 'Noto Serif SC', serif;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.04);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--color-bg-light);
+            color: var(--color-text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* ================= 顶部导航与 Mega Menu ================= */
+        .header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(197, 168, 128, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+            padding: 0 40px;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--color-text-dark);
+            letter-spacing: 2px;
+        }
+
+        .logo span { color: var(--color-primary); }
+
+        .nav-list { display: flex; gap: 30px; height: 100%; }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            cursor: pointer;
+            font-size: 15px;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-item:hover { color: var(--color-primary); }
+        .nav-item::after {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            width: 0; height: 2px; background: var(--color-primary);
+            transition: width 0.3s;
+        }
+        .nav-item:hover::after { width: 100%; }
+
+        /* Mega Menu 容器 */
+        .mega-menu {
+            position: absolute;
+            top: 80px; left: 0; width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.05);
+            border-top: 1px solid #eee;
+            opacity: 0; visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 40px 0;
+            pointer-events: none;
+        }
+
+        .header:hover .mega-menu.active {
+            opacity: 1; visibility: visible;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .mega-content {
+            max-width: 1200px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px; padding: 0 40px;
+        }
+
+        .mega-column h4 {
+            font-size: 16px; color: var(--color-text-dark);
+            margin-bottom: 15px; padding-bottom: 8px;
+            border-bottom: 1px solid var(--color-primary-light);
+        }
+
+        .mega-column ul li { margin-bottom: 10px; }
+        .mega-column ul li a {
+            font-size: 14px; color: var(--color-text-gray);
+            transition: color 0.2s;
+        }
+        .mega-column ul li a:hover { color: var(--color-primary); }
+
+        /* 移动端汉堡菜单按钮 */
+        .mobile-toggle { display: none; font-size: 24px; cursor: pointer; color: var(--color-text-dark); }
+
+        /* ================= 首屏轮播图 ================= */
+        .hero-section { width: 100%; height: 100vh; padding-top: 80px; }
+        .swiper { width: 100%; height: 100%; }
+        .swiper-slide { position: relative; display: flex; align-items: center; justify-content: center; }
+        .swiper-slide img { width: 100%; height: 100%; object-fit: cover; }
+        .swiper-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.1) 100%);
+        }
+        .slide-content {
+            position: absolute; left: 10%; top: 40%;
+            max-width: 500px;
+        }
+        .slide-content h2 { font-family: var(--font-serif); font-size: 48px; color: var(--color-text-dark); margin-bottom: 20px; }
+        .slide-content p { font-size: 18px; color: #555; margin-bottom: 30px; }
+
+        /* ================= 核心项目区域 (带配图) ================= */
+        .projects-section {
+            max-width: 1400px; margin: 100px auto; padding: 0 40px;
+        }
+
+        .section-header {
+            display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 50px;
+        }
+        .section-title h3 { font-family: var(--font-serif); font-size: 32px; font-weight: normal; }
+        .section-title p { color: var(--color-primary); font-size: 14px; letter-spacing: 2px; margin-top: 5px; text-transform: uppercase; }
+        .view-all {
+            display: flex; align-items: center; font-size: 14px; color: var(--color-text-gray); transition: 0.3s;
+        }
+        .view-all:hover { color: var(--color-primary); }
+
+        .projects-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px;
+        }
+
+        .project-card {
+            background: var(--color-bg-white); border-radius: 12px;
+            overflow: hidden; box-shadow: var(--shadow-soft);
+            transition: transform 0.4s, box-shadow 0.4s;
+            group: card;
+        }
+        .project-card:hover {
+            transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
+
+        .card-img-wrap { width: 100%; height: 280px; overflow: hidden; }
+        .card-img-wrap img {
+            width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;
+        }
+        .project-card:hover .card-img-wrap img { transform: scale(1.05); }
+
+        .card-info { padding: 30px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .card-info h4 { font-size: 22px; font-family: var(--font-serif); margin-bottom: 10px; }
+        .card-info p { font-size: 14px; color: var(--color-text-gray); margin-bottom: 25px; line-height: 1.5; }
+        
+        .btn-buy {
+            padding: 12px 35px; border: 1px solid var(--color-primary);
+            background: transparent; color: var(--color-primary);
+            border-radius: 30px; font-size: 14px; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-buy:hover { background: var(--color-primary); color: white; }
+
+        /* ================= 右侧悬浮按钮 (半透明线框高级感) ================= */
+        .fab-container {
+            position: fixed; right: 30px; bottom: 100px;
+            display: flex; flex-direction: column; gap: 15px; z-index: 999;
+        }
+
+        .fab-item {
+            width: 50px; height: 50px; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(197, 168, 128, 0.5); /* 香槟色线框 */
+            display: flex; justify-content: center; align-items: center;
+            color: var(--color-primary); cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease; position: relative;
+        }
+        .fab-item:hover {
+            background: var(--color-primary); color: white; border-color: var(--color-primary);
+            transform: scale(1.1);
+        }
+        
+        /* 细线 SVG 图标 */
+        .fab-item svg { width: 22px; height: 22px; stroke-width: 1.2; fill: none; stroke: currentColor; }
+
+        /* 悬浮提示文本 */
+        .fab-tooltip {
+            position: absolute; right: 65px; background: rgba(255,255,255,0.95);
+            color: var(--color-text-dark); padding: 8px 15px; border-radius: 4px;
+            font-size: 12px; white-space: nowrap; opacity: 0; visibility: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); border: 1px solid #eee;
+            transition: all 0.3s; transform: translateX(10px);
+        }
+        .fab-item:hover .fab-tooltip { opacity: 1; visibility: visible; transform: translateX(0); }
+
+        /* ================= 底部信息 ================= */
+        .footer {
+            background: #fff; padding: 60px 40px 30px; border-top: 1px solid #eaeaea;
+        }
+        .footer-content {
+            max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px;
+        }
+        .footer-brand { max-width: 300px; }
+        .footer-brand h2 { font-family: var(--font-serif); font-size: 24px; margin-bottom: 15px; }
+        .footer-brand p { font-size: 13px; color: var(--color-text-gray); }
+        
+        .footer-links { display: flex; gap: 80px; }
+        .footer-column h5 { font-size: 16px; margin-bottom: 20px; }
+        .footer-column ul li { margin-bottom: 12px; font-size: 14px; color: var(--color-text-gray); cursor: pointer; }
+        .footer-column ul li:hover { color: var(--color-primary); }
+        
+        .footer-bottom {
+            max-width: 1400px; margin: 40px auto 0; padding-top: 20px;
+            border-top: 1px solid #f0f0f0; text-align: center;
+            font-size: 12px; color: #aaa;
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 992px) {
+            .nav-list { display: none; }
+            .mobile-toggle { display: block; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .footer-links { flex-direction: column; gap: 30px; }
+            .slide-content h2 { font-size: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部导航 -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">亚整所<span>.</span></div>
+            
+            <!-- 桌面端导航 -->
+            <ul class="nav-list" id="desktop-nav">
+                <!-- 由 JS 动态渲染 -->
+            </ul>
+
+            <div class="mobile-toggle">☰</div>
+        </div>
+
+        <!-- 悬浮 Mega Menu 面板 -->
+        <div class="mega-menu" id="mega-menu-panel">
+            <div class="mega-content" id="mega-content-container">
+                <!-- 动态内容渲染区域 -->
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- 首屏轮播 -->
+        <section class="hero-section">
+            <div class="swiper heroSwiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&q=80&w=1920" alt="高端面部护理">
+                        <div class="swiper-overlay"></div>
+                        <div class="slide-content">
+                            <h2>重塑时光之美</h2>
+                            <p>国际化审美标准，1V1私享定制面部护理，让时间在您的肌肤上停滞。</p>
+                        </div>
+                    </div>
+                    <div class="swiper-slide">
+                        <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&q=80&w=1920" alt="环境与服务">
+                        <div class="swiper-overlay"></div>
+                        <div class="slide-content">
+                            <h2>奢享静谧空间</h2>
+                            <p>五星级私密诊疗环境，全流程尊贵服务体验。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </section>
+
+        <!-- 核心项目推荐 -->
+        <section class="projects-section">
+            <div class="section-header">
+                <div class="section-title">
+                    <h3>精选核心项目</h3>
+                    <p>Signature Treatments</p>
+                </div>
+                <a href="#" class="view-all">查看全部 ↗</a>
+            </div>
+
+            <div class="projects-grid">
+                <!-- 项目1：眼袋 -->
+                <div class="project-card">
+                    <div class="card-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&q=80&w=800" alt="眼部护理">
+                    </div>
+                    <div class="card-info">
+                        <h4>精细化眼袋祛除</h4>
+                        <p>微创隐痕技术，平复眼袋与泪沟，重焕眼周年轻态，告别疲惫感。</p>
+                        <button class="btn-buy">立即抢购</button>
+                    </div>
+                </div>
+
+                <!-- 项目2：抗衰 -->
+                <div class="project-card">
+                    <div class="card-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&q=80&w=800" alt="抗衰管理">
+                    </div>
+                    <div class="card-info">
+                        <h4>时光逆流抗衰</h4>
+                        <p>联合射频与声波技术，深层提拉紧致，全方位重塑下颌线与面部轮廓。</p>
+                        <button class="btn-buy">立即抢购</button>
+                    </div>
+                </div>
+
+                <!-- 项目3：植发 -->
+                <div class="project-card">
+                    <div class="card-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&q=80&w=800" alt="植发管理">
+                    </div>
+                    <div class="card-info">
+                        <h4>FUE 无痕美学植发</h4>
+                        <p>高存活率提取技术，根据三庭五眼比例定制发际线，自然浓密。</p>
+                        <button class="btn-buy">立即抢购</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 右侧悬浮操作组 (高级线框风格) -->
+    <aside class="fab-container">
+        <!-- 全国热线 -->
+        <div class="fab-item">
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <div class="fab-tooltip">全国热线</div>
+        </div>
+        <!-- 领取优惠 -->
+        <div class="fab-item">
+            <svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="12" rx="2" ry="2"></rect><path d="M12 8v12"></path><path d="M16 8c0-2.21-1.79-4-4-4S8 5.79 8 8"></path></svg>
+            <div class="fab-tooltip">领取优惠</div>
+        </div>
+        <!-- 获取地址 -->
+        <div class="fab-item">
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <div class="fab-tooltip">获取地址</div>
+        </div>
+    </aside>
+
+    <!-- 底部信息 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>亚整所<span>.</span></h2>
+                <p>国际化高端医疗美容品牌，秉承医疗本质与艺术审美，为您提供安全、专业的定制化变美方案。</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h5>联系我们</h5>
+                    <ul>
+                        <li>全国热线：400-XXX-XXXX</li>
+                        <li>官方微信：YaZhengSuo_VIP</li>
+                        <li>总部：上海市静安区高端商业中心</li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h5>社交媒体</h5>
+                    <ul>
+                        <li>小红书主页</li>
+                        <li>官方微博</li>
+                        <li>微信公众号</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2024 亚整所医疗美容 版权所有. 隐私政策 | 使用条款
+        </div>
+    </footer>
+
+    <!-- 引入 Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+        // 初始化轮播图
+        const swiper = new Swiper('.heroSwiper', {
+            loop: true,
+            effect: "fade", // 淡入淡出效果更显高级
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+        });
+
+        // 导航栏 Mega Menu 完整数据结构配置
+        const navData = [
+            {
+                name: '首页',
+                categories: [
+                    { title: '品牌首页', items: ['品牌形象', '精选项目', '专属预约'] }
+                ]
+            },
+            {
+                name: '关于我们',
+                categories: [
+                    { title: '品牌介绍', items: ['品牌理念'] },
+                    { title: '品牌文化', items: ['医疗规范', '国际审美'] },
+                    { title: '发展历程', items: ['品牌节点', '城市布局'] },
+                    { title: '社会责任', items: ['公益活动', '政府合作'] }
+                ]
+            },
+            {
+                name: '亚整所',
+                categories: [
+                    { title: '专业技术', items: ['眼部精细化', '抗衰管理', '皮肤年轻化'] },
+                    { title: '专家团队', items: ['医师介绍', '专业资质'] },
+                    { title: '门店环境', items: ['接待空间', '诊疗空间', '私享护理'] }
+                ]
+            },
+            {
+                name: '核心项目',
+                categories: [
+                    { title: '眼袋', items: ['微创眼袋祛除术', '激光眼袋紧致术', '眼袋术后修复'] },
+                    { title: '抗衰', items: ['时光逆流注射术', '射频联合超声炮', '颈部抗衰套餐'] },
+                    { title: '淡斑', items: ['皮秒激光祛斑', '超皮秒联合中胚层', '激光术后修复'] },
+                    { title: '双眼皮', items: ['埋线双眼皮', '切开双眼皮', '双眼皮修复', '内眼角开大'] },
+                    { title: '植发', items: ['FUE 无痕植发', 'ARTAS 机器人植发', '非手术生发治疗'] }
+                ]
+            },
+            {
+                name: '全国门店',
+                categories: [
+                    { title: '城市门店', items: ['杭州', '上海', '北京', '深圳'] },
+                    { title: '门店服务', items: ['获取地址', '预约到店'] }
+                ]
+            },
+            {
+                name: '专利',
+                categories: [
+                    { title: '专利技术', items: ['眼部技术', '抗衰技术', '皮肤管理技术'] },
+                    { title: '专业背书', items: ['证书展示', '安全说明'] }
+                ]
+            },
+            {
+                name: '联系我们',
+                categories: [
+                    { title: '联系方式', items: ['全国热线', '预约中心', '总部地址'] },
+                    { title: '在线咨询', items: ['微信咨询', '客服预约'] },
+                    { title: '隐私政策', items: ['信息保护', '使用说明'] }
+                ]
+            },
+            {
+                name: '招聘',
+                categories: [
+                    { title: '人才理念', items: ['专业成长', '长期发展'] },
+                    { title: '招聘岗位', items: ['医师岗位', '咨询岗位', '运营岗位'] },
+                    { title: '投递方式', items: ['邮箱投递', '微信联系'] }
+                ]
+            }
+        ];
+
+        // 动态生成导航与交互逻辑
+        const navContainer = document.getElementById('desktop-nav');
+        const megaPanel = document.getElementById('mega-menu-panel');
+        const megaContent = document.getElementById('mega-content-container');
+
+        navData.forEach((menuItem, index) => {
+            // 生成一级导航
+            const li = document.createElement('li');
+            li.className = 'nav-item';
+            li.textContent = menuItem.name;
+            li.dataset.index = index;
+            navContainer.appendChild(li);
+
+            // 悬停事件处理：渲染二级与三级菜单
+            li.addEventListener('mouseenter', () => {
+                megaContent.innerHTML = ''; // 清空内容
+                
+                menuItem.categories.forEach(cat => {
+                    const col = document.createElement('div');
+                    col.className = 'mega-column';
+                    
+                    let ulContent = cat.items.map(sub => `<li><a href="#">${sub}</a></li>`).join('');
+                    col.innerHTML = `
+                        <h4>${cat.title}</h4>
+                        <ul>${ulContent}</ul>
+                    `;
+                    megaContent.appendChild(col);
+                });
+                
+                megaPanel.classList.add('active');
+            });
+        });
+
+        // 离开导航区域隐藏 Mega Menu
+        document.querySelector('.header').addEventListener('mouseleave', () => {
+            megaPanel.classList.remove('active');
+        });
+
+        // 滚动时为头部添加阴影背景
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 50) {
+                header.style.boxShadow = '0 5px 20px rgba(0,0,0,0.05)';
+            } else {
+                header.style.boxShadow = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

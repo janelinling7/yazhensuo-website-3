@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>亚整所医疗美容 | 亚洲科技美学管家 - 官方网站</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;500;700&family=Playfair+Display:italic,wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-gold: #C5A059;
+            --cream: #FDFBF8;
+            --deep-gold: #A68042;
+            --text-dark: #1A1A1A;
+        }
+        body { font-family: 'Noto Sans SC', sans-serif; background-color: var(--cream); color: var(--text-dark); overflow-x: hidden; }
+        .serif { font-family: 'Noto Serif SC', serif; }
+        .en-serif { font-family: 'Playfair Display', serif; }
+
+        /* 预约按钮呼吸特效 */
+        @keyframes pulse-gold {
+            0% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(197, 160, 89, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(197, 160, 89, 0); }
+        }
+        .btn-booking {
+            background: linear-gradient(135deg, #D4AF37 0%, #C5A059 100%);
+            animation: pulse-gold 2s infinite;
+        }
+
+        /* 侧边悬浮 */
+        .float-contact {
+            position: fixed; right: 20px; top: 50%; transform: translateY(-50%); z-index: 100;
+        }
+
+        /* 渐现效果 */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        .line-gold { height: 1px; background: linear-gradient(90deg, transparent, var(--brand-gold), transparent); }
+    </style>
+</head>
+<body>
+
+    <!-- 侧边预约挂件 -->
+    <div class="float-contact flex flex-col gap-3">
+        <div class="w-14 h-14 bg-white shadow-xl rounded-full flex items-center justify-center cursor-pointer hover:bg-[#C5A059] hover:text-white transition group">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+        </div>
+        <div class="w-14 h-14 btn-booking shadow-xl rounded-full flex items-center justify-center text-white cursor-pointer">
+            <span class="text-[10px] font-bold text-center leading-tight">预约<br>礼遇</span>
+        </div>
+    </div>
+
+    <!-- 头部导航 -->
+    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md px-8 py-3 flex justify-between items-center border-b border-gray-100">
+        <img src="https://files.catbox.moe/k3690d.png" alt="亚整所Logo" class="h-12">
+        <div class="hidden lg:flex gap-12 text-sm tracking-[0.2em] font-medium text-gray-600">
+            <a href="#" class="hover:text-[#C5A059]">品牌哲学</a>
+            <a href="#" class="hover:text-[#C5A059]">面部矩阵</a>
+            <a href="#" class="hover:text-[#C5A059]">专家造诣</a>
+            <a href="#" class="hover:text-[#C5A059]">空间美学</a>
+        </div>
+        <button class="btn-booking px-8 py-2.5 rounded-sm text-white text-xs tracking-widest font-bold">立即预约预约 · CONSULTATION</button>
+    </nav>
+
+    <!-- 首屏 (Hero Section) -->
+    <section class="relative h-screen flex items-center overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1590439471364-192aa70c0b53?auto=format&fit=crop&q=80&w=2000" class="absolute inset-0 w-full h-full object-cover" alt="高端女性形象">
+        <div class="absolute inset-0 bg-gradient-to-r from-white/80 via-white/40 to-transparent"></div>
+        <div class="container mx-auto px-10 relative z-10">
+            <div class="max-w-2xl">
+                <p class="en-serif text-[#C5A059] italic text-2xl mb-4 tracking-wider leading-none">The Essence of Asian Beauty</p>
+                <h1 class="serif text-6xl md:text-7xl text-gray-900 mb-8 leading-[1.1]">定义<br>科技美学新高度</h1>
+                <div class="w-20 h-1 bg-[#C5A059] mb-8"></div>
+                <p class="text-gray-600 text-lg mb-10 leading-loose tracking-wide max-w-lg">
+                    亚整所医疗美容，以前沿科技融合东方审美，专注于淡化肌龄痕迹。我们不只是修饰，更是对生命质感的深度焕活。
+                </p>
+                <button class="bg-[#1A1A1A] text-white px-12 py-5 rounded-sm hover:bg-[#C5A059] transition-all duration-500 tracking-widest text-sm font-bold shadow-2xl">
+                    立即预约 · 专属您的美学方案
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 品牌哲学 (Brand Philosophy) -->
+    <section class="py-24 bg-white text-center">
+        <div class="max-w-3xl mx-auto px-6">
+            <span class="en-serif text-[#C5A059] tracking-widest uppercase text-xs">Philosophy</span>
+            <h2 class="serif text-4xl mt-4 mb-10">亚整所：定制化美学管理</h2>
+            <p class="text-gray-400 leading-loose tracking-widest">
+                我们坚信每张面孔都是独一无二的艺术品。亚整所摒弃流水线式审美，通过科技淡斑、精准抗衰与细节改善，让美自然生长，温和且充满力量。
+            </p>
+        </div>
+    </section>
+
+    <!-- 核心项目矩阵 (Project Matrix) -->
+    <section class="py-20 bg-[#F9F6F2]">
+        <div class="container mx-auto px-10">
+            <div class="flex justify-between items-end mb-16">
+                <div>
+                    <h2 class="serif text-4xl mb-2">明星科技项目</h2>
+                    <p class="text-[#C5A059] en-serif tracking-tighter italic">Signature Tech Managements</p>
+                </div>
+                <a href="#" class="text-xs tracking-widest border-b border-gray-400 pb-1 hover:border-[#C5A059] transition">查看全部项目</a>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-12">
+                <!-- 抗衰 -->
+                <div class="bg-white p-4 shadow-sm hover:shadow-2xl transition duration-500 group">
+                    <div class="h-[450px] overflow-hidden mb-8 relative">
+                        <img src="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition duration-1000" alt="科技抗衰">
+                        <div class="absolute top-4 left-4 bg-white/90 px-4 py-1 text-[10px] tracking-widest uppercase">Skin Firming</div>
+                    </div>
+                    <div class="px-4 pb-6">
+                        <h3 class="serif text-2xl mb-3">脸部科技抗衰</h3>
+                        <p class="text-gray-400 text-sm mb-6 leading-relaxed">多维改善肌肤松弛状态，重塑紧致轮廓，温和焕活胶原蛋白，让肌肤重拾弹润质感。</p>
+                        <div class="flex justify-between items-center bg-[#FDFBF8] p-4 rounded">
+                            <span class="text-xs text-gray-500 tracking-tighter">单部位体验价</span>
+                            <span class="text-2xl font-light text-[#C5A059]">￥368</span>
+                        </div>
+                        <button class="w-full mt-4 py-3 border border-[#C5A059] text-[#C5A059] text-xs font-bold hover:bg-[#C5A059] hover:text-white transition">立即抢约</button>
+                    </div>
+                </div>
+
+                <!-- 淡斑 -->
+                <div class="bg-white p-4 shadow-sm hover:shadow-2xl transition duration-500 group">
+                    <div class="h-[450px] overflow-hidden mb-8 relative">
+                        <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition duration-1000" alt="科技淡斑">
+                        <div class="absolute top-4 left-4 bg-white/90 px-4 py-1 text-[10px] tracking-widest uppercase">Spot Fading</div>
+                    </div>
+                    <div class="px-4 pb-6">
+                        <h3 class="serif text-2xl mb-3">科技淡斑管理</h3>
+                        <p class="text-gray-400 text-sm mb-6 leading-relaxed">针对晒斑、雀斑等色素沉积，采用科技淡化手段，从源头改善肤色暗沉，实现纯净质感。</p>
+                        <div class="flex justify-between items-center bg-[#FDFBF8] p-4 rounded">
+                            <span class="text-xs text-gray-500 tracking-tighter">单部位体验价</span>
+                            <span class="text-2xl font-light text-[#C5A059]">￥308</span>
+                        </div>
+                        <button class="w-full mt-4 py-3 border border-[#C5A059] text-[#C5A059] text-xs font-bold hover:bg-[#C5A059] hover:text-white transition">立即抢约</button>
+                    </div>
+                </div>
+
+                <!-- 眼袋 -->
+                <div class="bg-white p-4 shadow-sm hover:shadow-2xl transition duration-500 group">
+                    <div class="h-[450px] overflow-hidden mb-8 relative">
+                        <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition duration-1000" alt="改善眼袋">
+                        <div class="absolute top-4 left-4 bg-white/90 px-4 py-1 text-[10px] tracking-widest uppercase">Eye Revive</div>
+                    </div>
+                    <div class="px-4 pb-6">
+                        <h3 class="serif text-2xl mb-3">改善眼袋管理</h3>
+                        <p class="text-gray-400 text-sm mb-6 leading-relaxed">精准改善眼部浮肿与细纹，减轻视觉疲惫感，重塑明亮眼神，恢复眼周年轻态。</p>
+                        <div class="flex justify-between items-center bg-[#FDFBF8] p-4 rounded">
+                            <span class="text-xs text-gray-500 tracking-tighter">单部位体验价</span>
+                            <span class="text-2xl font-light text-[#C5A059]">￥468</span>
+                        </div>
+                        <button class="w-full mt-4 py-3 border border-[#C5A059] text-[#C5A059] text-xs font-bold hover:bg-[#C5A059] hover:text-white transition">立即抢约</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 专家团队 (Expert Team) -->
+    <section class="py-24 bg-white">
+        <div class="container mx-auto px-10 flex flex-col lg:flex-row items-center gap-20">
+            <div class="lg:w-1/2 relative">
+                <div class="absolute -top-10 -left-10 text-[10rem] text-gray-50 en-serif opacity-50 z-0 select-none">Expert</div>
+                <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=800" class="w-full relative z-10 shadow-2xl grayscale hover:grayscale-0 transition duration-700 rounded-sm">
+            </div>
+            <div class="lg:w-1/2">
+                <span class="text-[#C5A059] text-sm tracking-widest font-bold uppercase">Aesthetic Craftsman</span>
+                <h2 class="serif text-5xl mt-4 mb-8">匠心造诣 · 医艺融合</h2>
+                <p class="text-gray-500 leading-loose mb-10 text-lg">
+                    亚整所汇聚资深美学导师，每一位专家都拥有深厚的美学积淀。我们不只是操作者，更是您肌肤美学的雕琢者，确保每一次管理都达到温和、舒适与有效的平衡。
+                </p>
+                <ul class="space-y-4 mb-10">
+                    <li class="flex items-center gap-4 text-gray-700">
+                        <span class="w-2 h-2 bg-[#C5A059] rotate-45"></span> 亚洲女性肤质研究中心专家成员
+                    </li>
+                    <li class="flex items-center gap-4 text-gray-700">
+                        <span class="w-2 h-2 bg-[#C5A059] rotate-45"></span> 10,000+ 临床美学方案定制经验
+                    </li>
+                </ul>
+                <button class="btn-booking px-10 py-4 text-white text-xs font-bold tracking-widest">预约专家面诊</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 艺术空间 (Space Environment) -->
+    <section class="py-24 bg-[#F4EDE4]">
+        <div class="container mx-auto px-10">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-20">
+                <h2 class="serif text-4xl italic">静谧·私享·艺术</h2>
+                <div class="line-gold w-full md:w-1/2 mt-6 md:mt-0"></div>
+            </div>
+            <div class="grid grid-cols-12 gap-6">
+                <div class="col-span-12 md:col-span-8 h-[500px] overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=1200" class="w-full h-full object-cover hover:scale-105 transition duration-1000">
+                </div>
+                <div class="col-span-12 md:col-span-4 h-[500px] flex flex-col gap-6">
+                    <img src="https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?auto=format&fit=crop&q=80&w=600" class="h-1/2 object-cover">
+                    <div class="h-1/2 bg-[#C5A059] p-10 text-white flex flex-col justify-end">
+                        <h4 class="serif text-2xl mb-2">香槟金灵感空间</h4>
+                        <p class="text-white/70 text-xs leading-relaxed">每一寸空间的设计，皆为缓解您的焦虑，让变美成为一场身心的深度SPA。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 底部预约 CTA (Final CTA) -->
+    <footer class="bg-[#1A1A1A] py-24 text-white text-center">
+        <div class="max-w-4xl mx-auto px-6">
+            <img src="https://files.catbox.moe/k3690d.png" alt="亚整所" class="h-16 mx-auto mb-10 brightness-200">
+            <h2 class="serif text-5xl mb-6 tracking-wide italic font-light">与其向往，不如即刻改变</h2>
+            <p class="text-gray-500 mb-12 tracking-[0.3em] text-sm uppercase">YA ZHENG SUO · YOUR PRIVATE SKIN CONCIERGE</p>
+            <div class="flex flex-col md:flex-row gap-6 justify-center">
+                <button class="btn-booking px-16 py-5 rounded-sm text-sm font-bold tracking-widest shadow-2xl">立即开启焕颜计划</button>
+                <button class="border border-white/20 px-16 py-5 rounded-sm text-sm font-bold tracking-widest hover:bg-white hover:text-black transition duration-500">在线咨询客服</button>
+            </div>
+            <div class="mt-24 pt-10 border-t border-white/5 text-[10px] text-gray-600 tracking-widest leading-loose">
+                <p>温馨提示：以上服务均为生活美容项目，具体效果因人而异。体验价仅限新客首访单部位。亚整所医疗美容保留最终解释权。</p>
+                <p class="mt-4 opacity-50">&copy; 2024 YA ZHENG SUO INTERNATIONAL MEDICAL BEAUTY. ALL RIGHTS RESERVED.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

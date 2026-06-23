@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>亚整所 AARI | 国际化高端医疗美容</title>
+    <style>
+        :root {
+            /* 品牌色彩系统 */
+            --primary-bg: #fafafa;
+            --white-bg: #ffffff;
+            --champagne-gold: #dcb382; /* 低饱和香槟金 */
+            --champagne-light: rgba(220, 179, 130, 0.15);
+            --text-main: #333333;
+            --text-sub: #666666;
+            --text-light: #999999;
+            --border-color: rgba(220, 179, 130, 0.4);
+            
+            /* 玻璃拟态效果 */
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.04);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.6);
+            
+            /* 动画与过渡 */
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; }
+        body { background-color: var(--primary-bg); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
+        a { text-decoration: none; color: inherit; transition: var(--transition); }
+        ul { list-style: none; }
+        button { cursor: pointer; border: none; outline: none; background: transparent; font-family: inherit; transition: var(--transition); }
+
+        /* --- 1. 顶部导航栏 (毛玻璃 + Mega Menu) --- */
+        .header {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+            background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+        .header.scrolled { box-shadow: var(--glass-shadow); }
+        .nav-container {
+            max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 80px; padding: 0 40px;
+        }
+        .logo { font-size: 24px; font-weight: 300; letter-spacing: 2px; color: var(--champagne-gold); }
+        .logo strong { font-weight: 600; color: var(--text-main); }
+        
+        .nav-menu { display: flex; height: 100%; }
+        .nav-item { position: relative; height: 100%; display: flex; align-items: center; margin: 0 20px; cursor: pointer; font-size: 15px; color: var(--text-main); }
+        .nav-item::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--champagne-gold); transition: var(--transition);
+        }
+        .nav-item:hover { color: var(--champagne-gold); }
+        .nav-item:hover::after, .nav-item.active::after { width: 100%; }
+        .nav-item.active { color: var(--champagne-gold); }
+
+        /* Mega Menu */
+        .mega-menu {
+            position: absolute; top: 80px; left: 0; width: 100%; background: var(--glass-bg);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color); box-shadow: var(--glass-shadow);
+            opacity: 0; visibility: hidden; transform: translateY(-10px); transition: var(--transition);
+            display: flex; justify-content: center; padding: 40px 0; z-index: 999;
+        }
+        .nav-item:hover .mega-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+        .mega-column { margin: 0 40px; min-width: 150px; }
+        .mega-title { font-size: 14px; font-weight: 600; color: var(--champagne-gold); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        .mega-list li { margin-bottom: 12px; }
+        .mega-list a { font-size: 14px; color: var(--text-sub); }
+        .mega-list a:hover { color: var(--champagne-gold); padding-left: 5px; }
+
+        /* --- 全局通用组件 --- */
+        .section-title { text-align: center; margin-bottom: 50px; opacity: 0; transform: translateY(30px); transition: var(--transition); }
+        .section-title.show { opacity: 1; transform: translateY(0); }
+        .section-title h2 { font-size: 32px; font-weight: 300; letter-spacing: 4px; margin-bottom: 15px; }
+        .section-title p { font-size: 14px; color: var(--text-light); letter-spacing: 2px; text-transform: uppercase; }
+        
+        .btn {
+            display: inline-block; padding: 12px 32px; font-size: 14px; letter-spacing: 1px;
+            background: var(--glass-bg); border: 1px solid var(--champagne-gold); color: var(--text-main);
+            backdrop-filter: blur(5px); transition: var(--transition);
+        }
+        .btn:hover { background: var(--champagne-gold); color: #fff; box-shadow: 0 10px 20px rgba(220,179,130,0.3); transform: translateY(-2px); }
+
+        .page-content { display: none; padding-top: 80px; min-height: 80vh; animation: fadeIn 0.8s ease; }
+        .page-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* --- 2. 首页 Banner 轮播 --- */
+        .hero-banner { position: relative; height: calc(100vh - 80px); overflow: hidden; background: #eee; }
+        .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 1s ease-in-out;
+            display: flex; align-items: center; justify-content: center; text-align: center;
+        }
+        .slide.active { opacity: 1; z-index: 1; }
+        
+        /* 模拟高级渐变/光影图片 */
+        .slide:nth-child(1) { background: linear-gradient(135deg, #ffffff 0%, #f3ede6 100%); }
+        .slide:nth-child(2) { background: linear-gradient(135deg, #f9f9f9 0%, #e8e3dc 100%); }
+        .slide:nth-child(3) { background: linear-gradient(135deg, #ffffff 0%, #eaeaea 100%); }
+        
+        .slide-content { max-width: 800px; padding: 40px; background: rgba(255,255,255,0.4); backdrop-filter: blur(10px); border: 1px solid var(--border-color); transform: translateY(30px); opacity: 0; transition: all 1s 0.3s; }
+        .slide.active .slide-content { transform: translateY(0); opacity: 1; }
+        .slide-title { font-size: 42px; font-weight: 300; margin-bottom: 20px; letter-spacing: 3px; color: var(--text-main); }
+        .slide-subtitle { font-size: 16px; color: var(--text-sub); margin-bottom: 40px; letter-spacing: 1px; }
+        
+        .slider-dots { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); z-index: 2; display: flex; gap: 15px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(0,0,0,0.2); cursor: pointer; transition: var(--transition); border: 1px solid transparent; }
+        .dot.active { background: var(--champagne-gold); transform: scale(1.3); box-shadow: 0 0 10px rgba(220,179,130,0.5); }
+
+        /* --- 3. 核心项目板块 --- */
+        .section-projects { padding: 100px 40px; max-width: 1400px; margin: 0 auto; }
+        .projects-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 50px; }
+        .project-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+        
+        .project-card {
+            background: var(--glass-bg); border: 1px solid var(--border-color); border-radius: 4px; overflow: hidden;
+            backdrop-filter: blur(10px); transition: var(--transition); opacity: 0; transform: translateY(40px);
+        }
+        .project-card.show { opacity: 1; transform: translateY(0); }
+        .project-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(220,179,130,0.15); border-color: var(--champagne-gold); }
+        .card-img { height: 280px; background: #e0e0e0; position: relative; overflow: hidden; }
+        /* 模拟图片占位 */
+        .project-card:nth-child(1) .card-img { background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.05)), #f1eee9; }
+        .project-card:nth-child(2) .card-img { background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.05)), #eef1f1; }
+        .project-card:nth-child(3) .card-img { background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.05)), #f1ebeb; }
+        .card-img::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%); }
+        .project-card:hover .card-img::after { transform: scale(1.1); transition: transform 0.8s; }
+        
+        .card-content { padding: 40px 30px; text-align: center; }
+        .card-title { font-size: 20px; font-weight: 400; margin-bottom: 15px; color: var(--text-main); }
+        .card-desc { font-size: 14px; color: var(--text-sub); margin-bottom: 30px; }
+
+        /* --- 4. 预约专属方案模块 --- */
+        .section-booking { padding: 100px 40px; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="%23fafafa" width="100" height="100"/><circle fill="%23f2f2f2" cx="50" cy="50" r="40"/></svg>') center/cover; position: relative; }
+        .booking-container { max-width: 800px; margin: 0 auto; background: var(--glass-bg); backdrop-filter: blur(15px); border: 1px solid var(--border-color); padding: 60px; box-shadow: var(--glass-shadow); border-radius: 4px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
+        .form-group.full { grid-column: 1 / -1; }
+        .form-control { width: 100%; padding: 15px; background: rgba(255,255,255,0.5); border: 1px solid var(--border-color); border-radius: 2px; font-size: 14px; transition: var(--transition); color: var(--text-main); outline: none; }
+        .form-control:focus { border-color: var(--champagne-gold); background: #fff; box-shadow: 0 0 10px var(--champagne-light); }
+        .submit-btn { width: 100%; padding: 16px; font-size: 16px; letter-spacing: 2px; }
+
+        /* --- 右侧悬浮组件 & 返回顶部 --- */
+        .floating-tools { position: fixed; right: 20px; top: 50%; transform: translateY(-50%); z-index: 990; display: flex; flex-direction: column; gap: 15px; }
+        .tool-btn {
+            width: 50px; height: 50px; background: var(--glass-bg); border: 1px solid var(--border-color); backdrop-filter: blur(10px);
+            display: flex; justify-content: center; align-items: center; cursor: pointer; transition: var(--transition); border-radius: 50%;
+            position: relative;
+        }
+        .tool-btn svg { width: 20px; height: 20px; stroke: var(--champagne-gold); fill: none; stroke-width: 1.5; transition: var(--transition); }
+        .tool-btn:hover { background: var(--champagne-gold); box-shadow: 0 5px 15px rgba(220,179,130,0.4); transform: translateX(-5px); }
+        .tool-btn:hover svg { stroke: #fff; }
+        .tool-tip {
+            position: absolute; right: 60px; background: var(--white-bg); border: 1px solid var(--border-color); padding: 8px 15px; font-size: 12px;
+            white-space: nowrap; opacity: 0; visibility: hidden; transition: var(--transition); pointer-events: none; box-shadow: var(--glass-shadow);
+        }
+        .tool-btn:hover .tool-tip { opacity: 1; visibility: visible; right: 70px; }
+
+        .back-to-top {
+            position: fixed; right: 20px; bottom: 40px; z-index: 990; opacity: 0; visibility: hidden; transform: translateY(20px);
+        }
+        .back-to-top.show { opacity: 1; visibility: visible; transform: translateY(0); }
+
+        /* --- 底部 Footer --- */
+        .footer { background: var(--white-bg); border-top: 1px solid var(--border-color); padding: 80px 40px 30px; margin-top: auto; }
+        .footer-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 60px; margin-bottom: 60px; }
+        .footer-brand { margin-bottom: 20px; }
+        .footer-logo { font-size: 20px; color: var(--champagne-gold); margin-bottom: 15px; }
+        .footer-info p { font-size: 13px; color: var(--text-sub); margin-bottom: 10px; letter-spacing: 1px; }
+        .footer-title { font-size: 14px; font-weight: 600; margin-bottom: 25px; letter-spacing: 2px; }
+        .social-links { display: flex; gap: 15px; }
+        .social-link { font-size: 13px; color: var(--text-sub); border: 1px solid var(--border-color); padding: 5px 15px; border-radius: 20px; transition: var(--transition); }
+        .social-link:hover { color: var(--champagne-gold); border-color: var(--champagne-gold); }
+        .footer-bottom { border-top: 1px solid #eee; padding-top: 30px; text-align: center; font-size: 12px; color: var(--text-light); }
+
+        /* 响应式 */
+        @media (max-width: 992px) {
+            .nav-menu { display: none; /* 移动端需配合JS实现汉堡菜单，原型中默认隐藏 */ }
+            .project-grid { grid-template-columns: 1fr; }
+            .form-grid { grid-template-columns: 1fr; }
+            .footer-container { grid-template-columns: 1fr; gap: 30px; }
+            .hero-banner { height: 60vh; }
+            .slide-title { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. 顶部导航栏 -->
+    <header class="header" id="header">
+        <div class="nav-container">
+            <div class="logo">AARI <strong>亚整所</strong></div>
+            <ul class="nav-menu" id="navMenu">
+                <!-- 由JS动态渲染 Menu 数据，保证轻量无截断 -->
+            </ul>
+        </div>
+    </header>
+
+    <!-- 右侧悬浮工具 -->
+    <div class="floating-tools">
+        <div class="tool-btn">
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <span class="tool-tip">全国热线</span>
+        </div>
+        <div class="tool-btn">
+            <svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+            <span class="tool-tip">领取优惠</span>
+        </div>
+        <div class="tool-btn">
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span class="tool-tip">获取地址</span>
+        </div>
+    </div>
+    <div class="tool-btn back-to-top" id="backToTop">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+    </div>
+
+    <!-- 页面容器 -->
+    <main id="app">
+        <!-- 页面 1：首页 -->
+        <div id="page-home" class="page-content active">
+            <!-- 首屏轮播 -->
+            <section class="hero-banner">
+                <div class="slide active">
+                    <div class="slide-content">
+                        <h1 class="slide-title">亚整所 AARI｜东方审美与专业医美的高端融合</h1>
+                        <p class="slide-subtitle">克制美学理念，为您提供长期的状态管理与关怀</p>
+                        <a href="#" class="btn" onclick="switchPage('core-projects')">探索项目</a>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="slide-content">
+                        <h1 class="slide-title">以克制美学，重塑成熟肌肤与轮廓管理</h1>
+                        <p class="slide-subtitle">结合国际化审美与科技，专注专业医疗美容服务</p>
+                        <a href="#booking" class="btn">立即咨询</a>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="slide-content">
+                        <h1 class="slide-title">专业医疗美容服务，为长期年轻状态提供支持</h1>
+                        <p class="slide-subtitle">专业医师团队，规范医疗流程，安全可信赖</p>
+                        <a href="#" class="btn" onclick="switchPage('about')">了解品牌</a>
+                    </div>
+                </div>
+                <div class="slider-dots">
+                    <div class="dot active" onclick="setSlide(0)"></div>
+                    <div class="dot" onclick="setSlide(1)"></div>
+                    <div class="dot" onclick="setSlide(2)"></div>
+                </div>
+            </section>
+
+            <!-- 核心项目 -->
+            <section class="section-projects scroll-anim">
+                <div class="projects-header">
+                    <div class="section-title" style="margin-bottom:0; text-align:left;">
+                        <h2>核心项目</h2>
+                        <p>Core Programs</p>
+                    </div>
+                    <a href="#" class="btn" onclick="switchPage('core-projects')" style="border:none; border-bottom:1px solid var(--champagne-gold);">查看全部 →</a>
+                </div>
+                <div class="project-grid">
+                    <div class="project-card scroll-anim">
+                        <div class="card-img"></div>
+                        <div class="card-content">
+                            <h3 class="card-title">眼袋项目</h3>
+                            <p class="card-desc">专注眼周年轻化，改善疲态，重塑眼部平整度与紧致感。</p>
+                            <a href="#booking" class="btn">立即咨询</a>
+                        </div>
+                    </div>
+                    <div class="project-card scroll-anim">
+                        <div class="card-img"></div>
+                        <div class="card-content">
+                            <h3 class="card-title">抗衰项目</h3>
+                            <p class="card-desc">结合光电科技，为成熟肌肤提供多维度的轮廓与抗衰管理。</p>
+                            <a href="#booking" class="btn">立即咨询</a>
+                        </div>
+                    </div>
+                    <div class="project-card scroll-anim">
+                        <div class="card-img"></div>
+                        <div class="card-content">
+                            <h3 class="card-title">植发项目</h3>
+                            <p class="card-desc">专业毛发医学方案，提供精致护理与毛囊健康管理服务。</p>
+                            <a href="#booking" class="btn">立即咨询</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 预约表单 -->
+            <section id="booking" class="section-booking scroll-anim">
+                <div class="section-title">
+                    <h2>预约专属方案</h2>
+                    <p>根据您的关注项目与到店城市，提供专业咨询服务</p>
+                </div>
+                <div class="booking-container">
+                    <form onsubmit="event.preventDefault(); alert('信息已合规提交，专业顾问将尽快与您联系。');">
+                        <div class="form-grid">
+                            <div class="form-group"><input type="text" class="form-control" placeholder="您的姓名 *" required></div>
+                            <div class="form-group"><input type="tel" class="form-control" placeholder="联系电话 *" required></div>
+                            <div class="form-group"><input type="text" class="form-control" placeholder="所在城市"></div>
+                            <div class="form-group">
+                                <select class="form-control" required>
+                                    <option value="">请选择关注项目 *</option>
+                                    <option value="eye">眼部年轻化 / 眼袋</option>
+                                    <option value="anti">抗衰管理 / 光电</option>
+                                    <option value="hair">毛发医学 / 植发</option>
+                                    <option value="other">其他项目</option>
+                                </select>
+                            </div>
+                            <div class="form-group full">
+                                <textarea class="form-control" rows="4" placeholder="留言您的需求（选填）"></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn submit-btn">提交预约</button>
+                    </form>
+                </div>
+            </section>
+        </div>
+
+        <!-- 页面 2：关于我们 (示例框架) -->
+        <div id="page-about" class="page-content">
+            <section class="section-projects" style="text-align:center; padding-top:150px;">
+                <div class="section-title show">
+                    <h2>关于我们</h2>
+                    <p>About AARI</p>
+                </div>
+                <div class="booking-container" style="box-shadow:none; border:none; background:transparent;">
+                    <p style="color:var(--text-sub); font-size:16px; max-width:600px; margin:0 auto 40px;">
+                        亚整所 AARI 致力于将东方审美与国际化医美标准相融合，坚持专业、克制的医疗理念，拒绝绝对化承诺，为追求长期品质生活的受众提供安全、规范的医疗美容服务。
+                    </p>
+                    <a href="javascript:switchPage('home')" class="btn">返回首页</a>
+                </div>
+            </section>
+        </div>
+        
+        <!-- 页面 4：核心项目 (示例框架) -->
+        <div id="page-core-projects" class="page-content">
+             <section class="section-projects" style="padding-top:150px;">
+                <div class="section-title show">
+                    <h2>核心项目体系</h2>
+                    <p>Professional Medical Aesthetic</p>
+                </div>
+                <div class="project-grid">
+                    <!-- 仅作示例 -->
+                    <div class="project-card show"><div class="card-content"><h3 class="card-title">微创眼袋祛除术</h3><p class="card-desc">规范医疗流程，针对眼袋问题进行精准化处理。</p><a href="javascript:switchPage('home')" class="btn">预约咨询</a></div></div>
+                    <div class="project-card show"><div class="card-content"><h3 class="card-title">射频紧肤联合治疗</h3><p class="card-desc">光电联合应用，协助提升肌肤紧致感。</p><a href="javascript:switchPage('home')" class="btn">预约咨询</a></div></div>
+                    <div class="project-card show"><div class="card-content"><h3 class="card-title">FUE 无痕植发</h3><p class="card-desc">专业毛发医学团队，提供精细化毛囊提取与种植。</p><a href="javascript:switchPage('home')" class="btn">预约咨询</a></div></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 底部信息 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <div class="footer-logo">AARI <strong>亚整所</strong></div>
+                <p style="color:var(--text-sub); max-width:300px; font-size:13px; line-height:1.8;">以专业医疗为基石，以克制美学为导向，提供国际化审美的高端医美服务。</p>
+            </div>
+            <div class="footer-info">
+                <h4 class="footer-title">联系我们</h4>
+                <p>品牌简称：亚整所 AARI</p>
+                <p>企业热线：400-880-8838</p>
+                <p>总部地址：中国·杭州·钱江新城</p>
+                <p>客服中心：service@aari-clinic.com</p>
+            </div>
+            <div class="footer-info">
+                <h4 class="footer-title">关注品牌</h4>
+                <div class="social-links">
+                    <a href="#" class="social-link">百家号</a>
+                    <a href="#" class="social-link">抖言号</a>
+                    <a href="#" class="social-link">视频号</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>版权所有 © 亚整所 AARI 医疗美容 保留所有权利 ｜ 浙ICP备XXXXXXXX号-1 ｜ 医疗广告审查证明文号占位：(浙)医广[202X]第XXX号</p>
+            <p style="margin-top:8px; opacity:0.6;">* 页面内容仅供参考，任何医疗美容项目均存在风险，具体方案需由专业医师面诊评估后决定，不作绝对化效果保证。</p>
+        </div>
+    </footer>
+
+    <script>
+        // 1. 动态生成复杂的 Mega Menu 结构，保持代码精简与合规
+        const menuData = [
+            { id: 'home', name: '首页', columns: [
+                { title: '品牌首页', items: ['品牌形象', '核心优势', '预约入口'] },
+                { title: '推荐项目', items: ['眼袋项目', '抗衰管理', '植发养护'] },
+                { title: '专属方案', items: ['在线咨询', '到店预约', '个性评估'] }
+            ]},
+            { id: 'about', name: '关于我们', columns: [
+                { title: '品牌介绍', items: ['品牌理念', '国际审美', '专业定位'] },
+                { title: '发展历程', items: ['品牌起源', '重要节点', '未来布局'] },
+                { title: '社会责任', items: ['医疗规范', '用户安全', '长期主义'] }
+            ]},
+            { id: 'aari', name: '亚整所', columns: [
+                { title: '专业技术', items: ['微创技术', '光电技术', '毛发医学'] },
+                { title: '服务体验', items: ['贴心服务', '门店环境', '美容资讯'] }
+            ]},
+            { id: 'core-projects', name: '核心项目', columns: [
+                { title: '面部管理', items: ['眼部年轻化', '抗衰管理', '皮肤管理'] },
+                { title: '特色专科', items: ['眼部精雕', '毛发医学', '腋下管理'] }
+            ]},
+            { id: 'stores', name: '全国门店', columns: [
+                { title: '城市门店', items: ['杭州门店', '华东区域', '全国布局'] }
+            ]},
+            { id: 'patents', name: '专利', columns: [
+                { title: '专业资质', items: ['专利技术', '专利证书', '安全体系'] }
+            ]},
+            { id: 'contact', name: '联系我们', columns: [
+                { title: '服务中心', items: ['联系方式', '在线咨询', '隐私政策'] }
+            ]},
+            { id: 'careers', name: '招聘', columns: [
+                { title: '加入我们', items: ['人才理念', '招聘岗位', '员工发展'] }
+            ]}
+        ];
+
+        const navMenu = document.getElementById('navMenu');
+        menuData.forEach((menu, index) => {
+            const li = document.createElement('li');
+            li.className = `nav-item ${index === 0 ? 'active' : ''}`;
+            li.innerHTML = `<span onclick="switchPage('${menu.id}')">${menu.name}</span>`;
+            
+            if(menu.columns && menu.columns.length > 0) {
+                let columnsHtml = '';
+                menu.columns.forEach(col => {
+                    let itemsHtml = col.items.map(item => `<li><a href="#" onclick="event.preventDefault()">${item}</a></li>`).join('');
+                    columnsHtml += `<div class="mega-column"><div class="mega-title">${col.title}</div><ul class="mega-list">${itemsHtml}</ul></div>`;
+                });
+                li.innerHTML += `<div class="mega-menu">${columnsHtml}</div>`;
+            }
+            navMenu.appendChild(li);
+        });
+
+        // 2. 单页 SPA 切换逻辑
+        function switchPage(pageId) {
+            // 切换导航高亮
+            document.querySelectorAll('.nav-item').forEach(el => {
+                el.classList.remove('active');
+                if(el.querySelector('span').innerText === menuData.find(m => m.id === pageId)?.name) {
+                    el.classList.add('active');
+                }
+            });
+            // 隐藏所有页面，显示目标页面
+            document.querySelectorAll('.page-content').forEach(el => el.classList.remove('active'));
+            const targetPage = document.getElementById(`page-${pageId}`);
+            if(targetPage) {
+                targetPage.classList.add('active');
+            } else {
+                // 如果页面骨架未创建，默认跳回关于我们演示
+                document.getElementById('page-about').classList.add('active');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(triggerAnimations, 100);
+        }
+
+        // 3. 轮播图逻辑
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        function setSlide(index) {
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            currentSlide = index;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+        setInterval(() => { if(document.getElementById('page-home').classList.contains('active')) setSlide((currentSlide + 1) % 3); }, 5000);
+
+        // 4. 滚动交互效果 (导航条变化、返回顶部、元素淡入)
+        const header = document.getElementById('header');
+        const backToTop = document.getElementById('backToTop');
+        
+        function triggerAnimations() {
+            document.querySelectorAll('.scroll-anim, .section-title').forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if(rect.top < window.innerHeight * 0.85) el.classList.add('show');
+            });
+        }
+
+        window.addEventListener('scroll', () => {
+            let scrollTop = window.scrollY;
+            header.classList.toggle('scrolled', scrollTop > 50);
+            backToTop.classList.toggle('show', scrollTop > 500);
+            triggerAnimations();
+        });
+
+        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        
+        // 初始化动画
+        setTimeout(triggerAnimations, 100);
+    </script>
+</body>
+</html>
